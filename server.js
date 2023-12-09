@@ -22,6 +22,7 @@ const session_check = require('./routes/Session_check');
 const fetch_professionals = require('./routes/Fetch_professionals');
 const team = require('./routes/Team');
 const search = require('./routes/Search');
+const api = require('./routes/api/Api');
 const Unmatched = require('./routes/Unmatched');
 
 // MongoDB connection: 
@@ -52,6 +53,7 @@ app.use('/session_check', session_check);
 app.use('/fetch_professionals', fetch_professionals);
 app.use('/team', team);
 app.use('/search', search);
+app.use('/api', api);
 app.all('*', Unmatched);
 
 mongoose.connection.once('open', () =>
