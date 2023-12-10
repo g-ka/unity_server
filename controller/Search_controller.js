@@ -1,7 +1,7 @@
 const users =  require('../model/Users');
 const professionals = require('../model/Professionals');
 
-const insert_updates = (list) =>
+const insert_updates = async (list) =>
 {
   const { updated_professionals } = await users.findOne({ id: user_id });
   const updated_id = updated_professionals.map(professional => professional.id);
