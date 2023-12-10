@@ -1,6 +1,20 @@
 const users =  require('../model/Users');
 const professionals = require('../model/Professionals');
 
+const insert_updates = (list) =>
+{
+  const { updated_professionals } = await users.findOne({ id: user_id });
+  const updated_id = updated_professionals.map(professional => professional.id);
+  const professional_list_id = list.map(professional => professional.id);
+
+  const filtered_professional_list = list.filter(professional => !updated_id.includes(professional.id));
+  const filtered_updated_professionals = updated_professionals.filter(professional => professional_list_id.includes(professional.id));
+
+  const final_list = [...filtered_professional_list, ...filtered_updated_professionals];
+  return final_list.sort((a, b) => a.id - b.id);
+}
+
+
 const search_handler = async (req, res) =>
 {
   const user_id = req.cookies?.id;
@@ -13,15 +27,7 @@ const search_handler = async (req, res) =>
     const search_list = await professionals.find().skip((page_number-1)*10).limit(20);
 
     // INSERTING UPDATES:
-    const { updated_professionals } = await users.findOne({ id: user_id });
-    const updated_id = updated_professionals.map(professional => professional.id);
-    const professional_list_id = search_list.map(professional => professional.id);
-    
-    const filtered_professional_list = search_list.filter(professional => !updated_id.includes(professional.id));
-    const filtered_updated_professionals = updated_professionals.filter(professional => professional_list_id.includes(professional.id));
-    
-    const final_list = [...filtered_professional_list, ...filtered_updated_professionals];
-    const sorted_final_list = final_list.sort((a, b) => a.id - b.id);
+    const sorted_final_list = insert_updates(search_list);
 
     return res.status(200).json({ search_list: sorted_final_list });
   }
@@ -42,15 +48,7 @@ const search_handler = async (req, res) =>
   const search_list = await professionals.find({ id: { $in: filtered_id } });
 
   // INSERTING UPDATES:
-  const { updated_professionals } = await users.findOne({ id: user_id });
-  const updated_id = updated_professionals.map(professional => professional.id);
-  const professional_list_id = search_list.map(professional => professional.id);
-  
-  const filtered_professional_list = search_list.filter(professional => !updated_id.includes(professional.id));
-  const filtered_updated_professionals = updated_professionals.filter(professional => professional_list_id.includes(professional.id));
-  
-  const final_list = [...filtered_professional_list, ...filtered_updated_professionals];
-  const sorted_final_list = final_list.sort((a, b) => a.id - b.id);
+  const sorted_final_list = insert_updates(search_list);
 
   return res.status(200).json({ search_list: sorted_final_list });
 };
