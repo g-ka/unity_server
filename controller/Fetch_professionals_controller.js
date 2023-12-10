@@ -51,10 +51,12 @@ const fetch_professionals_handler = async (req, res) =>
   // INSERTING UPDATES:
   const { updated_professionals } = await users.findOne({ id: user_id });
   const updated_id = updated_professionals.map(professional => professional.id);
+  const professional_list_id = professionals_list.map(professional => professional.id);
   
   const filtered_professional_list = professionals_list.filter(professional => !updated_id.includes(professional.id));
+  const filtered_updated_professionals = updated_professionals.filter(professional => professional_list_id.includes(professional.id));
   
-  const final_list = [...filtered_professional_list, ...updated_professionals];
+  const final_list = [...filtered_professional_list, ...filtered_updated_professionals];
   const sorted_final_list = final_list.sort((a, b) => a.id - b.id);
 
   return res.status(200).json({ professionals_list: sorted_final_list })
