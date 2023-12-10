@@ -26,7 +26,7 @@ const search_handler = async (req, res) =>
     const search_list = await professionals.find().skip((page_number-1)*10).limit(20);
 
     // INSERTING UPDATES:
-    const sorted_final_list = insert_updates(search_list, user_id);
+    const sorted_final_list = await insert_updates(search_list, user_id);
 
     return res.status(200).json({ search_list: sorted_final_list });
   }
@@ -47,7 +47,7 @@ const search_handler = async (req, res) =>
   const search_list = await professionals.find({ id: { $in: filtered_id } });
 
   // INSERTING UPDATES:
-  const sorted_final_list = insert_updates(search_list, user_id);
+  const sorted_final_list = await insert_updates(search_list, user_id);
 
   return res.status(200).json({ search_list: sorted_final_list });
 };
