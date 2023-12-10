@@ -1,7 +1,7 @@
 const users =  require('../model/Users');
 const professionals = require('../model/Professionals');
 
-const insert_updates = async (list) =>
+const insert_updates = async (list, user_id) =>
 {
   const { updated_professionals } = await users.findOne({ id: user_id });
   const updated_id = updated_professionals.map(professional => professional.id);
@@ -12,8 +12,7 @@ const insert_updates = async (list) =>
 
   const final_list = [...filtered_professional_list, ...filtered_updated_professionals];
   return final_list.sort((a, b) => a.id - b.id);
-}
-
+};
 
 const search_handler = async (req, res) =>
 {
@@ -27,7 +26,7 @@ const search_handler = async (req, res) =>
     const search_list = await professionals.find().skip((page_number-1)*10).limit(20);
 
     // INSERTING UPDATES:
-    const sorted_final_list = insert_updates(search_list);
+    const sorted_final_list = insert_updates(search_list, user_id);
 
     return res.status(200).json({ search_list: sorted_final_list });
   }
@@ -48,7 +47,7 @@ const search_handler = async (req, res) =>
   const search_list = await professionals.find({ id: { $in: filtered_id } });
 
   // INSERTING UPDATES:
-  const sorted_final_list = insert_updates(search_list);
+  const sorted_final_list = insert_updates(search_list, user_id);
 
   return res.status(200).json({ search_list: sorted_final_list });
 };
