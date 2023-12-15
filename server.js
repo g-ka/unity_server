@@ -21,7 +21,6 @@ const Req_logger = require('./middleware/Req_logger');
 const session_check = require('./routes/Session_check');
 const fetch_professionals = require('./routes/Fetch_professionals');
 const team = require('./routes/Team');
-const search = require('./routes/Search');
 const api = require('./routes/api/Api');
 const Unmatched = require('./routes/Unmatched');
 
