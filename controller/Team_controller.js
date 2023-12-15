@@ -22,7 +22,6 @@ const team_details_handler = async (req, res) =>
   const final_list = [...filtered_professional_list, ...filtered_updated_professionals];
   const udpated_professionals_list = final_list.sort((a, b) => a.id - b.id);
 
-  // const team_members_list = await professionals.find({ id: { $in: team_members } });
   const team_members_list = udpated_professionals_list.filter(professional => team_members.includes(professional.id));
 
   res.status(200).json({ team_name, team_members_list });
