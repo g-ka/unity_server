@@ -52,7 +52,6 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use('/session_check', session_check);
 app.use('/fetch_professionals', fetch_professionals);
 app.use('/team', team);
-app.use('/search', search);
 app.use('/api', api);
 app.all('*', Unmatched);
 

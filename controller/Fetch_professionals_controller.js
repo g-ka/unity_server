@@ -5,7 +5,7 @@ const fetch_professionals_handler = async (req, res) =>
 {
   const user_id = req.cookies?.id;
 
-  let { page_number, domain, gender, avail } = req.query;
+  let { page_number, domain, gender, avail, search } = req.query;
   let professionals_list = [];
 
   const original_professionals_list = await professionals.find();
@@ -22,50 +22,73 @@ const fetch_professionals_handler = async (req, res) =>
   const udpated_professionals_list = final_list.sort((a, b) => a.id - b.id);
 
   if(domain === 'All' && gender === 'All' && avail === 'All')
-  {
-    professionals_list = udpated_professionals_list.slice((page_number - 1)*10, (page_number)*20);
+  {           
+    professionals_list = search ? 
+                          udpated_professionals_list.filter(professional => professional.first_name.toLowerCase().includes(search.toLowerCase()) || professional.last_name.toLowerCase().includes(search.toLowerCase())) :
+                            udpated_professionals_list.slice((page_number - 1)*10, (page_number)*20);
   }  
   else
   {
     if(domain !== 'All' && gender === 'All' && avail === 'All') 
-    {      
-      professionals_list = udpated_professionals_list.filter(professional => professional.domain === domain).slice((page_number - 1)*10, (page_number)*20);
+    {            
+      professionals_list = udpated_professionals_list.filter(professional => professional.domain === domain);
+      professionals_list = search ? 
+                            professionals_list.filter(professional => professional.first_name.toLowerCase().includes(search.toLowerCase()) || professional.last_name.toLowerCase().includes(search.toLowerCase())) :
+                              professionals_list.slice((page_number - 1)*10, (page_number)*20);
     }    
     else if(domain === 'All' && gender !== 'All' && avail === 'All')
-    {
-      professionals_list = udpated_professionals_list.filter(professional => professional.gender === gender).slice((page_number - 1)*10, (page_number)*20);
+    {      
+      professionals_list = udpated_professionals_list.filter(professional => professional.gender === gender);
+      professionals_list = search ? 
+                            professionals_list.filter(professional => professional.first_name.toLowerCase().includes(search.toLowerCase()) || professional.last_name.toLowerCase().includes(search.toLowerCase())) :
+                              professionals_list.slice((page_number - 1)*10, (page_number)*20);
     }    
     else if(domain === 'All' && gender === 'All' && avail !== 'All')
     {
       if(avail === 'Available') avail = true;
       else avail = false
-      
-      professionals_list = udpated_professionals_list.filter(professional => professional.available === avail).slice((page_number - 1)*10, (page_number)*20);      
+            
+      professionals_list = udpated_professionals_list.filter(professional => professional.available === avail);      
+      professionals_list = search ? 
+                            professionals_list.filter(professional => professional.first_name.toLowerCase().includes(search.toLowerCase()) || professional.last_name.toLowerCase().includes(search.toLowerCase())) :
+                              professionals_list.slice((page_number - 1)*10, (page_number)*20);
     }    
     else if(domain !== 'All' && gender !== 'All' && avail === 'All') 
-    {      
-      professionals_list = udpated_professionals_list.filter(professional => professional.domain === domain && professional.gender === gender).slice((page_number - 1)*10, (page_number)*20);      
+    {            
+      professionals_list = udpated_professionals_list.filter(professional => professional.domain === domain && professional.gender === gender);      
+      professionals_list = search ? 
+                            professionals_list.filter(professional => professional.first_name.toLowerCase().includes(search.toLowerCase()) || professional.last_name.toLowerCase().includes(search.toLowerCase())) :
+                              professionals_list.slice((page_number - 1)*10, (page_number)*20);
     }    
     else if(domain == 'All' && gender !== 'All' && avail !== 'All') 
     {
       if(avail === 'Available') avail = true;
       else avail = false
-      
-      professionals_list = udpated_professionals_list.filter(professional => professional.gender === gender && professional.available === avail).slice((page_number - 1)*10, (page_number)*20);      
+            
+      professionals_list = udpated_professionals_list.filter(professional => professional.gender === gender && professional.available === avail);      
+      professionals_list = search ?  
+                            professionals_list.filter(professional => professional.first_name.toLowerCase().includes(search.toLowerCase()) || professional.last_name.toLowerCase().includes(search.toLowerCase())) :
+                              professionals_list.slice((page_number - 1)*10, (page_number)*20);
     }  
     else if(domain !== 'All' && gender === 'All' && avail !== 'All') 
     {
       if(avail === 'Available') avail = true;
       else avail = false
-      
-      professionals_list = udpated_professionals_list.filter(professional => professional.domain === domain && professional.available === avail).slice((page_number - 1)*10, (page_number)*20);      
+            
+      professionals_list = udpated_professionals_list.filter(professional => professional.domain === domain && professional.available === avail);      
+      professionals_list = search ? 
+                            professionals_list.filter(professional => professional.first_name.toLowerCase().includes(search.toLowerCase()) || professional.last_name.toLowerCase().includes(search.toLowerCase())) :
+                              professionals_list.slice((page_number - 1)*10, (page_number)*20);
     }    
     else if(domain !== 'All' && gender !== 'All' && avail !== 'All')
     {
       if(avail === 'Available') avail = true;
       else avail = false
-      
-      professionals_list = udpated_professionals_list.filter(professional => professional.domain === domain && professional.gender === gender && professional.available === avail).slice((page_number - 1)*10, (page_number)*20);      
+            
+      professionals_list = udpated_professionals_list.filter(professional => professional.domain === domain && professional.gender === gender && professional.available === avail);      
+      professionals_list = search ? 
+                            professionals_list.filter(professional => professional.first_name.toLowerCase().includes(search.toLowerCase()) || professional.last_name.toLowerCase().includes(search.toLowerCase())) :
+                              professionals_list.slice((page_number - 1)*10, (page_number)*20);
     }    
   }  
 
