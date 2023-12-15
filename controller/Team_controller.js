@@ -9,7 +9,21 @@ const team_details_handler = async (req, res) =>
   const user = await users.findOne({ id });
   const { team_name, team_members } = user; 
 
-  const team_members_list = await professionals.find({ id: { $in: team_members } });
+  const original_professionals_list = await professionals.find();
+
+  // INSERTING UPDATES:
+  const { updated_professionals } = user;
+  const updated_id = updated_professionals.map(professional => professional.id);
+  const professional_list_id = original_professionals_list.map(professional => professional.id);
+  
+  const filtered_professional_list = original_professionals_list.filter(professional => !updated_id.includes(professional.id));
+  const filtered_updated_professionals = updated_professionals.filter(professional => professional_list_id.includes(professional.id));
+  
+  const final_list = [...filtered_professional_list, ...filtered_updated_professionals];
+  const udpated_professionals_list = final_list.sort((a, b) => a.id - b.id);
+
+  // const team_members_list = await professionals.find({ id: { $in: team_members } });
+  const team_members_list = udpated_professionals_list.filter(professional => team_members.includes(professional.id));
 
   res.status(200).json({ team_name, team_members_list });
 };
